@@ -130,7 +130,8 @@ class OpenIDConsumer extends \SimpleSAML\Auth\Source
         $id = \SimpleSAML\Auth\State::saveState($state, 'openid:init');
 
         $url = \SimpleSAML\Module::getModuleURL('openid/consumer.php');
-        \SimpleSAML\Utils\HTTP::redirectTrustedURL($url, ['AuthState' => $id]);
+        $httpUtils = new \SimpleSAML\Utils\HTTP();
+        $httpUtils->redirectTrustedURL($url, ['AuthState' => $id]);
     }
 
 
@@ -172,7 +173,8 @@ class OpenIDConsumer extends \SimpleSAML\Auth\Source
         if (!empty($this->realm)) {
             return $this->realm;
         } else {
-            return \SimpleSAML\Utils\HTTP::getSelfURLHost();
+                $httpUtils = new \SimpleSAML\Utils\HTTP();
+                return $httpUtils->getSelfURLHost();
         }
     }
 
@@ -261,7 +263,8 @@ class OpenIDConsumer extends \SimpleSAML\Auth\Source
 
             // For OpenID 2 failover to POST if redirect URL is longer than 2048
             if ($should_send_redirect || strlen($redirect_url) <= 2048) {
-                \SimpleSAML\Utils\HTTP::redirectTrustedURL($redirect_url);
+                $httpUtils = new \SimpleSAML\Utils\HTTP();
+                $httpUtils->redirectTrustedURL($redirect_url);
                 assert(false);
             }
         }
@@ -300,7 +303,8 @@ class OpenIDConsumer extends \SimpleSAML\Auth\Source
     {
         $consumer = $this->getConsumer($state);
 
-        $return_to = \SimpleSAML\Utils\HTTP::getSelfURL();
+        $httpUtils = new \SimpleSAML\Utils\HTTP();
+        $return_to = $httpUtils->getSelfURL();
 
         // Complete the authentication process using the server's
         // response.
